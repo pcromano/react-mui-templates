@@ -19,6 +19,9 @@ const styles = theme => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
+  selectedItem: {
+    background: "blue"
+  }
 });
 function getItems() {
   var json = {
@@ -26,33 +29,37 @@ function getItems() {
       "id": 1,
       "title": "Templates",
       "items": [{
-        "id": 10,
+        "id": 2,
         "name": "Forms",
-        "subitems": [{
-          "id": 11,
-          "name": "Contact Us",
-          "url": 'contact-us'
-        },
-        {
-          "id": 2,
-          "name": "Lollipop",
-          "url": '',
-          "subitems": [{
-              "id": 21,
-              "name": "Contact Us",
-              "url": 'contact-us'
+            "subitems": [{
+              "id": 3,
+              "name": "Sign-In",
+              "url": 'login'
             },
             {
-              "id": 22,
-              "name": "Lollipop",
-              "url": ''
+              "id": 4,
+              "name": "Album",
+              "url": 'album'
+            },
+            {
+              "id": 5,
+              "name": "Checkout",
+              "url": 'checkout'
             }]
-        }]
       },
       {
-        "id": 23,
-        "name": "Chrome",
-        "url" : 'chrome'
+        "id": 6,
+        "name": "Page Layouts",
+            "subitems": [{
+              "id": 7,
+              "name": "Mini Drawer",
+              "url": 'minidrawer'
+            },
+            {
+              "id": 8,
+              "name": "Nav Tabs",
+              "url": 'navtabs'
+            }]
       }
       ]
     }
@@ -60,12 +67,17 @@ function getItems() {
   };
   return json;
 }
+//const [selectedIndex, setSelectedIndex] = React.useState(1);
 
 class SidebarList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
-  }
+    this.state = {
+      2: true,
+      6: true
+    };
+  }  
+  
   handleClick = (e) => {
     this.setState({ [e]: !this.state[e] });
   };
@@ -85,15 +97,17 @@ class SidebarList extends React.Component {
                   <div key={item.id}>
                     {item.subitems != null ? (
                       <div key={item.id}>
-                        <ListItem button key={item.id} onClick={() => this.handleClick(item.name)} >
+                        <ListItem button key={item.id} onClick={() => this.handleClick(item.id)} >
                           <ListItemText primary={item.name} />
-                          {this.state[item.name] ? <ExpandLess /> : <ExpandMore />}
+                          {this.state[item.id] ? <ExpandLess /> : <ExpandMore />}
                         </ListItem>
-                        <Collapse key={list.items.id} component="li" in={this.state[item.name]} timeout="auto" unmountOnExit>
+                        <Collapse key={list.items.id} component="li" in={this.state[item.id]} timeout="auto" unmountOnExit>
                           <List disablePadding>
                             {item.subitems.map((sitem) => {
                               return (
-                                <ListItem button key={sitem.id} className={classes.nested} onClick={() => this.handleClickLink(sitem.url)}>
+                                <ListItem 
+                                selected={sitem.url===this.props.location.pathname ? true : false}
+                                button key={sitem.id} className={classes.nested} onClick={() => this.handleClickLink(sitem.url)}>
                                   <ListItemText key={sitem.id} primary={sitem.name} />
                                 </ListItem>
                               )
@@ -101,8 +115,9 @@ class SidebarList extends React.Component {
                           </List>
                         </Collapse> </div>
                     ) : (
-                        <ListItem button onClick={() => this.handleClickLink(item.url)} key={item.id}>
-                          <ListItemText primary={item.name} />
+                        <ListItem 
+                          button onClick={() => this.handleClickLink(item.url)} key={item.id}>   
+                          <ListItemText primary={item.name}  />  
                         </ListItem>)}
                   </div>
 

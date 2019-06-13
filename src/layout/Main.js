@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -7,6 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
+import HomeIcon from '@material-ui/icons/Home';
 import IconButton from '@material-ui/core/IconButton';
 import SidebarList from '../components/SidebarList';
 
@@ -17,6 +19,10 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+  },
+  toolbarButtons: {
+    marginLeft: "auto",
+    marginRight: -12
   },
   hide: {
     display: 'none',
@@ -51,10 +57,15 @@ const useStyles = makeStyles(theme => ({
     }),
     marginLeft: 0,
   },
+  linked: {
+    textDecoration: 'none',
+    color: 'white',
+  },
   toolbar: theme.mixins.toolbar,
 }));
 
-export default function Main() {
+export default function Main(props) {    
+  const MainContents = props.data;
   const classes = useStyles();
   const [open=true, setOpen] = React.useState();
   
@@ -64,7 +75,7 @@ export default function Main() {
   function handleDrawerClose() {    
     setOpen(false);
   }
-  return (
+  return (    
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
@@ -80,8 +91,15 @@ export default function Main() {
           </IconButton>
         
           <Typography variant="h6" noWrap>
-              React JS + Material UI Templates          
+              <Link to="/" className={classes.linked}>React JS + Material UI Templates</Link>          
           </Typography>
+          <IconButton 
+          className={classes.toolbarButtons} 
+          color="inherit" 
+          aria-label="Back to home" 
+          onClick={()=>(window.location="/")}>
+          <HomeIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -103,18 +121,9 @@ export default function Main() {
         })}
       >
         <div className={classes.drawerHeader} />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
-        </Typography>
+                  
+          {MainContents()}            
+        
       </main>
     </div>
   );
